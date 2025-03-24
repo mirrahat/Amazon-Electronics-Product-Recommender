@@ -1,0 +1,9 @@
+# Ignore large files and temporary files
+model.pkl
+*.csv
+*.ipynb_checkpoints/
+__pycache__/
+*.pyc
+*.pkl
+.env
+.DS_Store
