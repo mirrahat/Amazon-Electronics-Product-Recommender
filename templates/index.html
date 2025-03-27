@@ -1,3 +1,4 @@
+<!-- Save as index.html and deploy -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -198,116 +199,136 @@
 </head>
 <body>
 
-<!-- Header -->
 <header>
   <div class="name-block">
     <h1>Mir Hasibul Hasan Rahat</h1>
     <p>Software Developer · Data Science Enthusiast</p>
   </div>
   <div class="social-links">
-    <a href="https://www.linkedin.com/in/YOUR-LINKEDIN" target="_blank">LinkedIn</a>
-    <a href="https://github.com/YOUR-GITHUB" target="_blank">GitHub</a>
+    <a href="https://www.linkedin.com/in/mir-rahat-2b2108147" target="_blank">LinkedIn</a>
+    <a href="https://github.com/mirrahat" target="_blank">GitHub</a>
   </div>
 </header>
 
-<!-- Tabs -->
 <div class="tabs">
-  <button class="tab-button active" onclick="openTab('recommendation')">Recommendation</button>
-  <button class="tab-button" onclick="openTab('overview')">Overview</button>
-  <button class="tab-button" onclick="openTab('dataset')">Dataset</button>
-  <button class="tab-button" onclick="openTab('model')">Model</button>
-  <button class="tab-button" onclick="openTab('about')">About</button>
-  <button class="tab-button" onclick="openTab('limitations')">Limitations</button>
-  <button class="tab-button" onclick="openTab('future')">Future</button>
+  <button class="tab-button active" onclick="openTab(event, 'recommendation')">Recommendation</button>
+  <button class="tab-button" onclick="openTab(event, 'overview')">Overview</button>
+  <button class="tab-button" onclick="openTab(event, 'dataset')">Dataset</button>
+  <button class="tab-button" onclick="openTab(event, 'model')">Model</button>
+  <button class="tab-button" onclick="openTab(event, 'about')">About</button>
+  <button class="tab-button" onclick="openTab(event, 'limitations')">Limitations</button>
+  <button class="tab-button" onclick="openTab(event, 'future')">Future</button>
 </div>
 
-<!-- Tab: Recommendation -->
 <div id="recommendation" class="tab-content active">
   <h2>Product Recommendation</h2>
-  <form method="POST">
-    <input type="text" name="user_id" placeholder="Enter user ID" required />
-    <button type="submit">Get Recommendations</button>
-  </form>
 
-  {% if rated_products or recommendations %}
-  <div style="display: flex; flex-wrap: wrap; gap: 30px; margin-top: 30px;">
-    {% if rated_products %}
+  <!-- Highlighted Sample Input Section -->
+  <div style="background: #eef1ff; padding: 15px 20px; border-radius: 8px; border-left: 4px solid var(--accent); margin-bottom: 25px;">
+    <p style="margin: 0; font-size: 1rem;">
+      <strong>Sample User IDs:</strong> Trys <code>AKM1MP6P0OYPR</code>, <code>A1GI0U4ZRJA8WN</code>, <code>A2NWSAGRHCP8N5</code>, or <code>A2CX7LUOHB2NDG</code> for demo.  
+      Cold-start examples for new users: <code>AKM1MP6P0dddd</code>, <code>xyz123456</code>
+    </p>
+  </div>
+
+  <!-- Recommendation Form and Output -->
+  <div style="display: flex; flex-wrap: wrap; gap: 30px;">
     <div style="flex: 1 1 300px;">
-      <h3>Rated Products</h3>
-      <ul>
-        {% for item in rated_products %}
-        <li>{{ item }}</li>
-        {% endfor %}
-      </ul>
+      <form method="POST">
+        <label for="user_id">Enter a User ID:</label>
+        <input type="text" name="user_id" id="user_id" placeholder="e.g. AKM1MP6P0OYPR or xyz123456" required />
+        <button type="submit">Get Recommendations</button>
+      </form>
     </div>
-    {% endif %}
-    {% if recommendations %}
+
+    <!-- Output and Results Section -->
+    {% if rated_products or recommendations %}
     <div style="flex: 1 1 300px;">
-      <h3>Recommended Products</h3>
-      <ul>
-        {% for item in recommendations %}
-        <li>{{ item }}</li>
-        {% endfor %}
-      </ul>
+      {% if rated_products %}
+        <h3>Rated Products By Your Given User</h3>
+        <ul>
+          {% for item in rated_products %}
+            <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      {% if recommendations %}
+        <h3>Recommended Products</h3>
+        <ul>
+          {% for item in recommendations %}
+            <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </div>
     {% endif %}
   </div>
-  {% endif %}
 </div>
 
-<!-- Tab: Overview -->
+
 <div id="overview" class="tab-content">
   <h2>Overview</h2>
-  <p>This system is a personalized product recommendation engine built using collaborative filtering (SVD). It intelligently suggests products to users based on their historical preferences and behavior, or offers fallback recommendations to new users.</p>
+  <p>This project is a personalized product recommendation system built with collaborative filtering using matrix factorization (SVD). It predicts likely user interests and handles cold-start users with fallback logic. Built using Python, pandas, Surprise, and evaluated with RMSE and Precision</p>
 </div>
 
-<!-- Tab: Dataset -->
 <div id="dataset" class="tab-content">
   <h2>Dataset</h2>
-  <p>The system uses a large-scale e-commerce dataset containing user ID, product ID, rating, and timestamp. The data was preprocessed and used to train a Surprise SVD model for collaborative filtering.</p>
+  <p>Dataset: <strong>ratings_Electronics.csv</strong> which consists of almost one million user's data from Amazon's open data repository. Contains <code>user_id</code>, <code>product_id</code>, <code>rating</code>, and <code>timestamp</code>.</p>
+  <ul>
+    <li>Dropped <code>timestamp</code> and duplicates.</li>
+    <li>Removed missing values.</li>
+    <li>Performed EDA to explore user/product activity and rating distribution.</li>
+    <li>Prepared with Surprise’s Reader and Dataset for training.</li>
+  </ul>
 </div>
 
-<!-- Tab: Model -->
 <div id="model" class="tab-content">
-  <h2>Model</h2>
-  <p>The model uses Singular Value Decomposition (SVD) from the Surprise library to predict unseen ratings. It was trained on 100% of the dataset using <code>build_full_trainset()</code>, and recommendations are based on the top-N predictions. A shuffle option allows randomized presentation for demo purposes.</p>
+  <h2>Model Information</h2>
+  <p>Model: <strong>Singular Value Decomposition (SVD)</strong> from the Surprise library.</p>
+  <ul>
+    <li>Trained on an 80/20 train-test split.</li>
+    <li>Evaluated using Root Mean Squared Error (RMSE).</li>
+    <li>Benchmarked against KNN, NMF, and Baseline models.</li>
+    <li>Top-N product recommender based on predicted ratings.</li>
+    <li>Although the Baseline model achieved a lower RMSE than SVD, SVD was chosen due to its ability to capture latent user-item interactions.</li>
+    <li>For large datasets (e.g., 1M+ records), simple models may overfit to frequent interactions, whereas SVD effectively generalizes by decomposing the user-item matrix.</li>
+    <li>SVD reduces noise in sparse recommendation data and improves personalization, making it more suitable for real-world recommendation systems despite slightly higher RMSE.</li>
+  </ul>
 </div>
 
-<!-- Tab: About -->
+
 <div id="about" class="tab-content">
-  <h2>About</h2>
-  <p>Created by Mir Hasibul Hasan Rahat, a software developer and data science enthusiast. This project showcases skills in backend development, machine learning, and user-centered design using Flask.</p>
+  <h2>About Me</h2>
+  <p>I'm a data-driven developer with a strong passion for Data Science, focusing on machine learning, predictive analytics, and insightful data storytelling. I enjoy solving real-world problems using data and have hands-on experience with model building and evaluation. Beyond data, I’ve built scalable backend systems using ASP.NET Core and created dynamic, user-friendly interfaces with React. My goal is to blend data science with full-stack development to deliver smart, end-to-end solutions.</p>
 </div>
 
-<!-- Tab: Limitations -->
 <div id="limitations" class="tab-content">
   <h2>Limitations</h2>
   <ul>
-    <li>No real product metadata (name, image, etc.) in the dataset</li>
-    <li>Cold-start problem partially solved using popular/hidden gem fallback</li>
-    <li>Model retraining required for updated predictions</li>
+    <li>No product metadata (images, categories).</li>
+    <li>Cold-start problem for new users/products.</li>
+    <li>Requires retraining for new data.</li>
+    <li>Implicit preferences only, lacks contextual data.</li>
   </ul>
 </div>
 
-<!-- Tab: Future -->
 <div id="future" class="tab-content">
   <h2>Future Improvements</h2>
   <ul>
-    <li>Include product names and images using external metadata</li>
-    <li>Add user session tracking and login features</li>
-    <li>Support content-based and hybrid recommendation models</li>
-    <li>Deploy using Docker + Azure App Services or Kubernetes</li>
+    <li>Integrate product metadata and images.</li>
+    <li>Use hybrid models for better cold-start handling.</li>
+    <li>Add login/authentication and dashboards.</li>
+    <li>Real-time recommendation API integration.</li>
+    <li>Explore deep learning (e.g., Autoencoders, NCF).</li>
   </ul>
 </div>
 
-<!-- Footer -->
 <footer>
   &copy; 2025 Mir Hasibul Hasan Rahat — All rights reserved.
 </footer>
 
-<!-- JS: Tab Control -->
 <script>
-  function openTab(tabId) {
+  function openTab(event, tabId) {
     const contents = document.querySelectorAll('.tab-content');
     const buttons = document.querySelectorAll('.tab-button');
 
